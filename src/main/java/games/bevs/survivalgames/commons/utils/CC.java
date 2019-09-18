@@ -2,11 +2,6 @@ package games.bevs.survivalgames.commons.utils;
 
 import org.bukkit.ChatColor;
 
-/**
- * Chat colours as strings
- * 
- * @author Sprock
- */
 public class CC
 {
 	

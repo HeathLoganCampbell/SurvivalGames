@@ -1,4 +1,4 @@
-package games.bevs.survivalgames.componets;
+package games.bevs.survivalgames.game.componets;
 
 import org.bukkit.event.Listener;
 

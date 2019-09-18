@@ -1,4 +1,4 @@
-package games.bevs.survivalgames.game;
+package games.bevs.survivalgames.game.games;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -9,11 +9,18 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.HandlerList;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import games.bevs.survivalgames.componets.Componet;
+import games.bevs.survivalgames.game.ChampionToken;
+import games.bevs.survivalgames.game.PlayState;
+import games.bevs.survivalgames.game.componets.Componet;
+import games.bevs.survivalgames.map.Map;
 import lombok.Getter;
+import lombok.Setter;
 
 public class Game 
 {
+	@Getter @Setter
+	private int id;
+	
 	@Getter
 	private HashMap<UUID, PlayState> playState = new HashMap<>();
 	
@@ -23,12 +30,17 @@ public class Game
 	@Getter
 	private String gamemode;
 	
+	@Getter
 	private JavaPlugin plugin;
 	
-	public Game(String gamemode, JavaPlugin plugin)
+	@Getter
+	private Map map;
+	
+	public Game(String gamemode, JavaPlugin plugin, Map map)
 	{
 		this.gamemode = gamemode;
 		this.plugin = plugin;
+		this.map = map;
 	}
 	
 	public void spawn(Player player)

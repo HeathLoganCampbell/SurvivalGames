@@ -5,6 +5,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import games.bevs.survivalgames.commons.utils.CC;
 import games.bevs.survivalgames.events.StageChangeEvent;
+import games.bevs.survivalgames.game.games.Game;
 import lombok.Getter;
 
 public class GameClock 
@@ -19,19 +20,25 @@ public class GameClock
 	
 	private @Getter Game game;
 	
+	private JavaPlugin plugin;
+	
 	public GameClock(JavaPlugin plugin, Game game)
 	{
 		this.stage =  Stage.CREATING;
 		this.seconds = this.stage.getSeconds();
 		
+		this.plugin = plugin;
 		this.game = game;
 		
-		//ticks
-		this.taskId = Bukkit.getScheduler().scheduleSyncRepeatingTask(plugin, () -> {
-			this.onTick();
-		}, 1l, 1l);
 		
 		this.setStage(Stage.WAITING_PLAYERS);
+	}
+	
+	public void start()
+	{
+		this.taskId = Bukkit.getScheduler().scheduleSyncRepeatingTask(this.plugin, () -> {
+			this.onTick();
+		}, 1l, 1l);
 	}
 	
 	public void setStage(Stage stage)

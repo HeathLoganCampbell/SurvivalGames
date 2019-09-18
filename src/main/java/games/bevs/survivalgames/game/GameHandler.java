@@ -5,6 +5,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 
 import games.bevs.survivalgames.events.StageChangeEvent;
+import games.bevs.survivalgames.game.games.Game;
 
 public class GameHandler implements Listener
 {

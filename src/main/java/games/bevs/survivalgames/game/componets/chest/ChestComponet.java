@@ -1,4 +1,4 @@
-package games.bevs.survivalgames.componets.chest;
+package games.bevs.survivalgames.game.componets.chest;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -16,7 +16,7 @@ import org.bukkit.inventory.ItemStack;
 
 import games.bevs.survivalgames.commons.utils.ItemStackBuilder;
 import games.bevs.survivalgames.commons.utils.MathUtils;
-import games.bevs.survivalgames.componets.Componet;
+import games.bevs.survivalgames.game.componets.Componet;
 
 public class ChestComponet extends Componet 
 {
@@ -32,6 +32,8 @@ public class ChestComponet extends Componet
 		this.populate();
 	}
 	
+	
+	//TODO: Add potions and bow + arrows, melon slices
 	public void populate()
 	{
 		//weapons
@@ -87,7 +89,7 @@ public class ChestComponet extends Componet
 	public List<ItemStack> getItems(int tier)
 	{
 		ArrayList<ItemStack> items = new ArrayList<>();
-		for(int i = 0; i < MathUtils.getRandom().nextInt(5); i++)
+		for(int i = 0; i < MathUtils.getRandom().nextInt(5) + 1; i++)
 		{
 			int index = MathUtils.getRandom().nextInt(ChestComponet.items.size());
 			items.add(ChestComponet.items.get(index));

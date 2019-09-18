@@ -1,9 +1,9 @@
 package games.bevs.survivalgames.events;
 
 import games.bevs.survivalgames.commons.events.EventBase;
-import games.bevs.survivalgames.game.Game;
 import games.bevs.survivalgames.game.GameClock;
 import games.bevs.survivalgames.game.Stage;
+import games.bevs.survivalgames.game.games.Game;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;

@@ -2,14 +2,15 @@ package games.bevs.survivalgames.game.games.classic;
 
 import org.bukkit.plugin.java.JavaPlugin;
 
-import games.bevs.survivalgames.componets.chest.ChestComponet;
-import games.bevs.survivalgames.game.Game;
+import games.bevs.survivalgames.game.componets.chest.ChestComponet;
+import games.bevs.survivalgames.game.games.Game;
+import games.bevs.survivalgames.map.Map;
 
 public class ClassicGame extends Game
 {
-	public ClassicGame(JavaPlugin plugin)
+	public ClassicGame(JavaPlugin plugin, Map map)
 	{
-		super("Classic", plugin);
+		super("Classic", plugin, map);
 		
 		this.addComponet(new ChestComponet());
 	}
