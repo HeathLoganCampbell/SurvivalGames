@@ -13,6 +13,21 @@ import games.bevs.survivalgames.game.games.Game;
 import games.bevs.survivalgames.game.games.classic.ClassicGame;
 import games.bevs.survivalgames.map.MapManager;
 
+/**
+ * /sg dev create
+ * /sg dev list
+ * /sg dev join <GameId> 
+ *
+ * TODO:
+ * - Scoreboards
+ * - Titles
+ * - Death messages
+ * - Handling outs 
+ * - Database
+ * - Lobby
+ * - Disable block break
+ * 
+ */
 public class SurvivalGamesPlugin extends JavaPlugin
 {
 	private MapManager mapManager;

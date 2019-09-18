@@ -122,7 +122,7 @@ public class ChestComponet extends Component
 	{
 		Block block = e.getClickedBlock();
 		
-		if(block.getWorld() != this.getGame().getWorld())
+		if(block.getWorld() != this.getGameWorld())
 			return;
 		
 		if (block.getType() == Material.CHEST  && !this.openedChests.contains(block)) 
