@@ -114,6 +114,7 @@ public class ChestComponet extends Componet
 		chest.update();
 	}
 	
+	//TODO: check if the world is the game world
 	@EventHandler
 	public void onInteract(PlayerInteractEvent e)
 	{
@@ -128,11 +129,11 @@ public class ChestComponet extends Componet
 			 for(BlockFace blockface : CHEST_BLOCKS_DOUBLE_FACES)
 			 {
 				 Block otherBlock = block.getRelative(blockface);
-				 if(otherBlock.getType() == Material.CHEST && !this.openedChests.contains(block))
+				 if(otherBlock.getType() == Material.CHEST && !this.openedChests.contains(otherBlock))
 				 {
 					 this.openedChests.add(otherBlock);
 					 Chest otherChest = (Chest) otherBlock.getState();
-					 Inventory otherInv = chest.getBlockInventory();
+					 Inventory otherInv = otherChest.getBlockInventory();
 					 
 					 this.fillChest(otherChest, otherInv);
 				 }
