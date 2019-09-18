@@ -16,9 +16,7 @@ public class GameHandler implements Listener
 		if(e.getNextStage() == Stage.TELEPORTING)
 		{
 			//Spawn players
-			Bukkit.getOnlinePlayers().forEach(player -> {
-				game.spawn(player);
-			});
+			game.spawn();
 			
 			e.setNextStage(Stage.FROZEN);
 		}

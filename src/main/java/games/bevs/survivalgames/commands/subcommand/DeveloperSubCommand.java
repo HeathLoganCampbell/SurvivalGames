@@ -56,7 +56,7 @@ public class DeveloperSubCommand extends SubCommand
 	{
 		GameClock clock = this.gameManager.getGameClock(gameId);
 		if(clock == null) return false;
-		
+		clock.getGame().join(player);
 		return true;
 	}
 	
@@ -64,7 +64,7 @@ public class DeveloperSubCommand extends SubCommand
 	{
 		GameClock clock = this.gameManager.getGameClock(gameId);
 		if(clock == null) return false;
-		
+		clock.getGame().leave(player);
 		return true;
 	}
 	
@@ -102,7 +102,7 @@ public class DeveloperSubCommand extends SubCommand
 				}
 				
 				int gameId = Integer.parseInt(gameIdStr);
-				return this.tpGame(player, gameId);
+				return this.joinGame(player, gameId);
 			}
 			
 			if(subCmd.equalsIgnoreCase("leave"))
@@ -121,7 +121,7 @@ public class DeveloperSubCommand extends SubCommand
 				}
 				
 				int gameId = Integer.parseInt(gameIdStr);
-				return this.tpGame(player, gameId);
+				return this.leaveGame(player, gameId);
 			}
 			
 			if(subCmd.equalsIgnoreCase("tp"))
