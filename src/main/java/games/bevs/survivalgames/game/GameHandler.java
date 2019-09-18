@@ -1,6 +1,7 @@
 package games.bevs.survivalgames.game;
 
 import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 
@@ -28,7 +29,19 @@ public class GameHandler implements Listener
 		
 		if(e.getNextStage() == Stage.CHAMPIONS)
 		{
-			game.champion(new ChampionToken("I don't know yet"));
+			//player with the mode kills or health wins
+			double mostHealth = -1;
+			Player mostHealthPlayer = null;
+			for(Player player : game.getAlivePlayers())
+			{
+				if(mostHealthPlayer == null || mostHealth < player.getHealth())
+				{
+					mostHealth = player.getHealth();
+					mostHealthPlayer = player;
+				}	
+			}
+			
+			game.champion(new ChampionToken(mostHealthPlayer));
 		}
 		
 		if(e.getNextStage() == Stage.FINISHED)

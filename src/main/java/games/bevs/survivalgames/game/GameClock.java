@@ -52,7 +52,7 @@ public class GameClock
 		{
 			StageChangeEvent event = new StageChangeEvent(this.stage, stage, this);
 			event.call();
-			Bukkit.broadcastMessage(CC.gray + "Stage ]> " + this.stage.name() + " => " + stage.name());
+			Bukkit.broadcastMessage(CC.gray + "Stage ]> " + this.stage + " => " + stage);
 
 			this.stage = event.getNextStage();
 			this.seconds = event.getNextStage().getSeconds();
@@ -99,6 +99,13 @@ public class GameClock
 		return null;
 	}
 	
+	public void remove()
+	{
+		this.getGame().remove();
+		this.game = null;
+		this.plugin = null;
+	}
+	
 	public void decreaseSeconds()
 	{
 		this.seconds--;
@@ -113,11 +120,17 @@ public class GameClock
 	
 	public void onSecond()
 	{
+		if(this.getStage().isLive())
+		{
+			this.getGame().second();
+		}
+		
 		if(this.getStage().isTimable())
 		{
 			this.decreaseSeconds();
 			
-			Bukkit.broadcastMessage(this.getSeconds() + " seconds");
+			if(this.getSeconds() % 5 == 0)
+				Bukkit.broadcastMessage(this.getSeconds() + " seconds");
 			
 			if(this.getSeconds() == 0)
 			{
@@ -125,24 +138,44 @@ public class GameClock
 				this.setStage(stage);
 			}
 		}
-		else
+		
+		if(this.getGame().isChampionFound())
 		{
-			if(this.getStage() == Stage.WAITING_PLAYERS)
+			Stage stage = this.nextStage(this.getStage());
+			this.setStage(stage);
+		}
+		
+		if(this.getStage() == Stage.WAITING_PLAYERS)
+		{
+			if(this.getGame().getPlayState().size() == 1)
 			{
-				if(Bukkit.getOnlinePlayers().size() == 1)
-				{
-					this.setStage(Stage.COUNTDOWN);
-				}
-			}
-			
-			if(this.getStage() == Stage.COUNTDOWN)
-			{
-				if(Bukkit.getOnlinePlayers().size() <= 0)
-				{
-					this.setStage(Stage.WAITING_PLAYERS);
-				}
+				this.setStage(Stage.COUNTDOWN);
 			}
 		}
 		
+		if(this.getStage() == Stage.COUNTDOWN)
+		{
+			if(this.getGame().getPlayState().size() <= 0)
+			{
+				this.setStage(Stage.WAITING_PLAYERS);
+			}
+		}
+		
+		if(this.getStage() == Stage.FINISHED)
+		{
+			this.getGame().getMap().getWorld().getPlayers().forEach(player ->
+			{
+				player.teleport(Bukkit.getWorlds().get(0).getSpawnLocation());
+				player.sendMessage("Send to lobby");
+			});
+			this.setStage(Stage.DELETING);
+		}
+			
+		
+		if(this.getStage() == Stage.DELETING)
+		{
+			//end game
+			Bukkit.getScheduler().cancelTask(this.getTaskId());
+		}
 	}
 }

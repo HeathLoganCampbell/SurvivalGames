@@ -1,5 +1,7 @@
 package games.bevs.survivalgames.game;
 
+import org.bukkit.entity.Player;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
@@ -7,5 +9,5 @@ import lombok.Getter;
 @AllArgsConstructor
 public class ChampionToken
 {
-	private String winnerName;
+	private Player player;
 }

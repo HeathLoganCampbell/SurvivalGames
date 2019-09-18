@@ -2,13 +2,16 @@ package games.bevs.survivalgames.game.games;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.UUID;
 import java.util.function.Consumer;
 
 import org.bukkit.Bukkit;
+import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.event.HandlerList;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.util.Vector;
 
 import games.bevs.survivalgames.commons.utils.CC;
 import games.bevs.survivalgames.game.ChampionToken;
@@ -39,6 +42,9 @@ public class Game
 	@Getter
 	private Map map;
 	
+	@Getter @Setter
+	private boolean championFound = false;
+	
 	public Game(String gamemode, JavaPlugin plugin, Map map)
 	{
 		this.gamemode = gamemode;
@@ -48,7 +54,12 @@ public class Game
 	
 	public void spawn()
 	{
-		this.applyToAll(player -> this.onSpawn(player));
+		this.applyToAll(player ->
+		{ 
+			this.playState.put(player.getUniqueId(), PlayState.ALIVE);
+			
+			this.onSpawn(player);
+		});
 	}
 	
 	public void start()
@@ -62,12 +73,12 @@ public class Game
 	public void champion(ChampionToken championToken)
 	{
 		this.onChampion(championToken);
+		this.championFound = true;
 	}
 	
 	public void finish()
 	{
 		this.unregisterComponets();
-		
 		this.onFinish();
 	}
 	
@@ -103,6 +114,18 @@ public class Game
 		this.broadcast(CC.gray + player.getDisplayName() + " has left");
 	}
 	
+	public List<Player> getAlivePlayers()
+	{
+		ArrayList<Player> alivePlayers = new ArrayList<>();
+		Bukkit.getOnlinePlayers().forEach(player ->
+		{
+			if(this.getPlayState().containsKey(player.getUniqueId()))
+				if(this.getPlayState().get(player.getUniqueId()) == PlayState.ALIVE)
+					alivePlayers.add(player);
+		});
+		return alivePlayers;
+	}
+	
 	public void applyToAll(Consumer<Player> consumer)
 	{
 		Bukkit.getOnlinePlayers().forEach(player ->
@@ -117,9 +140,20 @@ public class Game
 		applyToAll((player) -> player.sendMessage(message));
 	}
 	
+	public World getWorld()
+	{
+		return this.getMap().getWorld();
+	}
+	
+	public void second()
+	{
+		this.onSeconds();
+	}
+	
 	protected void onSpawn(Player player)
 	{
-		
+		player.teleport(this.getMap().getSpawn());
+		player.setVelocity(new Vector(0, 0, 0));
 	}
 	
 	protected void onStart()
@@ -129,7 +163,10 @@ public class Game
 	
 	protected void onChampion(ChampionToken championToken)
 	{
-		
+		String winner = "No one";
+		if(championToken.getPlayer() != null)
+			winner = championToken.getPlayer().getName();
+		Bukkit.broadcastMessage(winner + " has won");
 	}
 	
 	protected void onFinish()
@@ -139,11 +176,24 @@ public class Game
 	
 	protected void onSeconds()
 	{
-		
+		List<Player> alivePlayers = this.getAlivePlayers();
+		if(alivePlayers.size() <= 1)
+		{
+			ChampionToken championToken = new ChampionToken(alivePlayers.size() == 1 ? alivePlayers.get(0) : null);
+			this.champion(championToken);
+		}
 	}
 	
 	public void onStateChange(Stage stage, Stage lastStage)
 	{
 		
+	}
+	
+	public void remove()
+	{
+		this.componets.clear();
+		this.playState.clear();
+		this.plugin = null;
+		Bukkit.unloadWorld(this.getWorld(), false);
 	}
 }

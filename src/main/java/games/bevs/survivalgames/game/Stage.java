@@ -14,7 +14,8 @@ public enum Stage
 	GRACE_PERIOD(true, false,  5l),
 	LIVE(true, false, 60l * 20l),
 	CHAMPIONS(true, false, 10l),
-	FINISHED(false, false, -1l);
+	FINISHED(false, false, -1l),
+	DELETING(false, false, -1l);
 	
 	private @Getter boolean live;
 	private @Getter boolean joinnable;

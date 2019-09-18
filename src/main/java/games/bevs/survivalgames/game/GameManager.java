@@ -4,7 +4,10 @@ import java.io.File;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map.Entry;
 
+import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -13,7 +16,6 @@ import games.bevs.survivalgames.map.Map;
 import games.bevs.survivalgames.map.MapManager;
 import lombok.Getter;
 import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
 
 /**
  * 
@@ -22,7 +24,6 @@ import lombok.RequiredArgsConstructor;
  * @author Sprock
  *
  */
-@RequiredArgsConstructor
 public class GameManager 
 {
 	@Getter
@@ -36,6 +37,27 @@ public class GameManager
 	
 	@Getter @NonNull
 	private MapManager mapManager;
+	
+	public GameManager(JavaPlugin plugin,  MapManager mapManager)
+	{
+		this.plugin = plugin;
+		this.mapManager = mapManager;
+		
+		Bukkit.getScheduler().scheduleSyncRepeatingTask(plugin, () ->  {
+			Iterator<Entry<Integer, GameClock>> gameIt = games.entrySet().iterator();
+			while(gameIt.hasNext())
+			{
+				Entry<Integer, GameClock> gameclockEntry = gameIt.next();
+				GameClock clock =  gameclockEntry.getValue();
+				if(clock.getStage() == Stage.DELETING)
+				{
+					clock.remove();
+					this.games.remove(gameclockEntry.getKey());
+				}
+					
+			}
+		}, 200l, 200l);
+	}
 	
 	/**
 	 * loads in the world and generates a game instance
@@ -51,12 +73,13 @@ public class GameManager
 		String mapTemplate = this.mapManager.selectGameMap();
 		this.mapManager.copyTo(mapTemplate, name);
 		World world = this.mapManager.loadWorld(name);
-		Map map = new Map(world);
+		Map map = new Map(this.getPlugin(), world);
 		
 		Game game = null;
 		try {
 			Constructor<?> constr = gameClazz.getConstructor(JavaPlugin.class, Map.class);
 			game = (Game) constr.newInstance(this.getPlugin(), map);
+			game.setId(lastId);
 			this.addGame(game);
 			
 		} catch (NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
