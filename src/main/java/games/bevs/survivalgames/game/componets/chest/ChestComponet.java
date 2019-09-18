@@ -8,7 +8,6 @@ import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.Chest;
-import org.bukkit.block.DoubleChest;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.Inventory;
@@ -16,18 +15,19 @@ import org.bukkit.inventory.ItemStack;
 
 import games.bevs.survivalgames.commons.utils.ItemStackBuilder;
 import games.bevs.survivalgames.commons.utils.MathUtils;
-import games.bevs.survivalgames.game.componets.Componet;
+import games.bevs.survivalgames.game.componets.Component;
+import games.bevs.survivalgames.game.games.Game;
 
-public class ChestComponet extends Componet 
+public class ChestComponet extends Component 
 {
 	private static final BlockFace[]  CHEST_BLOCKS_DOUBLE_FACES = new BlockFace[] { BlockFace.NORTH, BlockFace.SOUTH, BlockFace.WEST, BlockFace.EAST}; 
 	private static ArrayList<ItemStack> items = new ArrayList<>();
 	
 	private HashSet<Block> openedChests = new HashSet<>();
 	
-	public ChestComponet() 
+	public ChestComponet(Game game) 
 	{
-		super("Loot Chest");
+		super("Loot Chest", game);
 		
 		this.populate();
 	}
@@ -121,6 +121,10 @@ public class ChestComponet extends Componet
 	public void onInteract(PlayerInteractEvent e)
 	{
 		Block block = e.getClickedBlock();
+		
+		if(block.getWorld() != this.getGame().getWorld())
+			return;
+		
 		if (block.getType() == Material.CHEST  && !this.openedChests.contains(block)) 
 		{
 			this.openedChests.add(block);

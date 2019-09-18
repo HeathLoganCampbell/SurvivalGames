@@ -20,12 +20,10 @@ public class GameHandler implements Listener
 			game.spawn();
 			
 			e.setNextStage(Stage.FROZEN);
-		}
-		
-		if(e.getNextStage() == Stage.GRACE_PERIOD)
-		{
+			
 			game.start();
 		}
+		
 		
 		if(e.getNextStage() == Stage.CHAMPIONS)
 		{

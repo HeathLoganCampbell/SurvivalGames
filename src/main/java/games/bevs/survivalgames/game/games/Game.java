@@ -15,9 +15,10 @@ import org.bukkit.util.Vector;
 
 import games.bevs.survivalgames.commons.utils.CC;
 import games.bevs.survivalgames.game.ChampionToken;
+import games.bevs.survivalgames.game.GameClock;
 import games.bevs.survivalgames.game.PlayState;
 import games.bevs.survivalgames.game.Stage;
-import games.bevs.survivalgames.game.componets.Componet;
+import games.bevs.survivalgames.game.componets.Component;
 import games.bevs.survivalgames.map.Map;
 import lombok.Getter;
 import lombok.Setter;
@@ -31,7 +32,7 @@ public class Game
 	private HashMap<UUID, PlayState> playState = new HashMap<>();
 	
 	@Getter
-	private ArrayList<Componet> componets = new ArrayList<>();
+	private ArrayList<Component> components = new ArrayList<>();
 	
 	@Getter
 	private String gamemode;
@@ -43,7 +44,7 @@ public class Game
 	private Map map;
 	
 	@Getter @Setter
-	private boolean championFound = false;
+	private GameClock gameClock;
 	
 	public Game(String gamemode, JavaPlugin plugin, Map map)
 	{
@@ -70,10 +71,15 @@ public class Game
 		this.onStart();
 	}
 	
+	public Stage getStage()
+	{
+		return this.getGameClock().getStage();
+	}
+	
 	public void champion(ChampionToken championToken)
 	{
 		this.onChampion(championToken);
-		this.championFound = true;
+		this.gameClock.setStage(Stage.FINISHED);
 	}
 	
 	public void finish()
@@ -82,21 +88,25 @@ public class Game
 		this.onFinish();
 	}
 	
-	public void addComponet(Componet componet)
+	/**
+	 * Component registered on Stage#GRACE_PERIOD
+	 * @param componet
+	 */
+	public void addComponet(Component component)
 	{
-		this.componets.add(componet);
+		this.components.add(component);
 	}
 	
 	public void registerComponets()
 	{
-		this.componets.forEach(componet -> {
+		this.components.forEach(componet -> {
 			Bukkit.getPluginManager().registerEvents(componet, this.plugin);
 		});
 	}
 	
 	public void unregisterComponets()
 	{
-		this.componets.forEach(componet -> {
+		this.components.forEach(componet -> {
 			HandlerList.unregisterAll(componet);
 		});
 	}
@@ -191,7 +201,7 @@ public class Game
 	
 	public void remove()
 	{
-		this.componets.clear();
+		this.components.clear();
 		this.playState.clear();
 		this.plugin = null;
 		Bukkit.unloadWorld(this.getWorld(), false);

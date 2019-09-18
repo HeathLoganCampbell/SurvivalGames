@@ -29,7 +29,7 @@ public class GameClock
 		
 		this.plugin = plugin;
 		this.game = game;
-		
+		this.game.setGameClock(this);
 		
 		this.setStage(Stage.WAITING_PLAYERS);
 	}
@@ -139,11 +139,11 @@ public class GameClock
 			}
 		}
 		
-		if(this.getGame().isChampionFound())
-		{
-			Stage stage = this.nextStage(this.getStage());
-			this.setStage(stage);
-		}
+//		if(this.getGame().isChampionFound())
+//		{
+//			Stage stage = this.nextStage(this.getStage());
+//			this.setStage(stage);
+//		}
 		
 		if(this.getStage() == Stage.WAITING_PLAYERS)
 		{
