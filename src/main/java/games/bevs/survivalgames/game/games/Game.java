@@ -7,9 +7,13 @@ import java.util.UUID;
 import java.util.function.Consumer;
 
 import org.bukkit.Bukkit;
+import org.bukkit.GameMode;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.event.HandlerList;
+import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.util.Vector;
 
@@ -124,6 +128,50 @@ public class Game
 		this.broadcast(CC.gray + player.getDisplayName() + " has left");
 	}
 	
+	private void dropInventory(Player player)
+	{
+		PlayerInventory inv = player.getInventory();
+		for(ItemStack item : inv.getContents())
+			player.getWorld().dropItemNaturally(player.getLocation(), item);
+		
+		for(ItemStack item : inv.getArmorContents())
+			player.getWorld().dropItemNaturally(player.getLocation(), item);
+		
+		inv.clear();
+		inv.setArmorContents(new ItemStack[4]);
+	}
+	
+	private void deathLaunch(Player player)
+	{
+		Vector vect = player.getLocation().getDirection().multiply(-1);
+		vect.setY(1.5);
+		
+		player.setVelocity(vect);
+	}
+	
+	public void toSpectator(Player player)
+	{
+		player.setGameMode(GameMode.SURVIVAL);
+		player.setAllowFlight(true);
+		player.setFlying(true);
+	}
+	
+	public void death(Player player, Player killer, DamageCause cause)
+	{
+		//remove player from the game
+		this.playState.put(player.getUniqueId(), PlayState.DEAD);
+		
+		player.setHealth(20);
+		this.dropInventory(player);
+		player.setLevel(0);
+		player.setExp(0);
+		
+		this.deathLaunch(player);
+		this.toSpectator(player);
+		
+		this.onDeath(player, killer, cause);
+	}
+	
 	public List<Player> getAlivePlayers()
 	{
 		ArrayList<Player> alivePlayers = new ArrayList<>();
@@ -182,6 +230,11 @@ public class Game
 	protected void onFinish()
 	{
 		
+	}
+	
+	protected void onDeath(Player player, Player killer, DamageCause cause)
+	{
+		this.broadcast(CC.gray + player.getDisplayName() + " has died! (" + this.getAlivePlayers().size() + " remaining)" );
 	}
 	
 	protected void onSeconds()

@@ -36,6 +36,9 @@ public class FreezeComponet extends Component
 		
 		if(stage == Stage.FROZEN ||stage == Stage.TELEPORTING)
 		{
+			if(!this.isInGame(player))
+				return;
+			
 			e.setTo(e.getFrom());
 			player.setVelocity(ZERO_VECTOR);
 		}

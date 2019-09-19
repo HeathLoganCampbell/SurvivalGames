@@ -9,8 +9,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import games.bevs.survivalgames.commands.SurvivalGamesCommand;
 import games.bevs.survivalgames.game.GameHandler;
 import games.bevs.survivalgames.game.GameManager;
-import games.bevs.survivalgames.game.games.Game;
-import games.bevs.survivalgames.game.games.classic.ClassicGame;
+import games.bevs.survivalgames.lobby.Lobby;
 import games.bevs.survivalgames.map.MapManager;
 
 /**
@@ -20,12 +19,15 @@ import games.bevs.survivalgames.map.MapManager;
  *
  * TODO:
  * - Scoreboards
+ * 		- players left
+ * 		- players watching
  * - Titles
  * - Death messages
  * - Handling outs 
  * - Database
  * - Lobby
  * - Disable block break
+ * - Levels
  * 
  */
 public class SurvivalGamesPlugin extends JavaPlugin
@@ -36,8 +38,10 @@ public class SurvivalGamesPlugin extends JavaPlugin
 	@Override
 	public void onEnable()
 	{
+		Lobby lobby = new Lobby();
+		
 		this.mapManager = new MapManager(this);
-		this.gameManager = new GameManager(this, this.mapManager);
+		this.gameManager = new GameManager(this, this.mapManager, lobby);
 		
 //		Game game = this.gameManager.createGame(ClassicGame.class);
 		

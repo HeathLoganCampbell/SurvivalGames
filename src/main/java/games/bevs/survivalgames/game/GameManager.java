@@ -9,9 +9,11 @@ import java.util.Map.Entry;
 
 import org.bukkit.Bukkit;
 import org.bukkit.World;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import games.bevs.survivalgames.game.games.Game;
+import games.bevs.survivalgames.lobby.Lobby;
 import games.bevs.survivalgames.map.Map;
 import games.bevs.survivalgames.map.MapManager;
 import lombok.Getter;
@@ -38,10 +40,14 @@ public class GameManager
 	@Getter @NonNull
 	private MapManager mapManager;
 	
-	public GameManager(JavaPlugin plugin,  MapManager mapManager)
+	@Getter
+	private Lobby lobby;
+	
+	public GameManager(JavaPlugin plugin,  MapManager mapManager, Lobby lobby)
 	{
 		this.plugin = plugin;
 		this.mapManager = mapManager;
+		this.lobby = lobby;
 		
 		Bukkit.getScheduler().scheduleSyncRepeatingTask(plugin, () ->  {
 			Iterator<Entry<Integer, GameClock>> gameIt = games.entrySet().iterator();
@@ -108,5 +114,28 @@ public class GameManager
 	public Game getGame(int id)
 	{
 		return this.games.get(id).getGame();
+	}
+	
+	/**
+	 * 
+	 * @param player
+	 * @param gameId
+	 * @return successfully joined
+	 */
+	public boolean joinGame(Player player, int gameId)
+	{
+		Game game = this.getGame(gameId);
+		if(game == null) return false;
+		game.join(player);
+		return true;
+	}
+	
+	public boolean leaveGame(Player player, int gameId)
+	{
+		Game game = this.getGame(gameId);
+		if(game == null) return false;
+		game.leave(player);
+		this.lobby.spawn(player);
+		return true;
 	}
 }
