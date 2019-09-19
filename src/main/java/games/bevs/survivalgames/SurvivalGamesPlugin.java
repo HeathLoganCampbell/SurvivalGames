@@ -21,9 +21,6 @@ import games.bevs.survivalgames.map.MapManager;
  * - Scoreboards
  * 		- players left
  * 		- players watching
- * - Titles
- * - Death messages
- * - Handling outs 
  * - Database
  * - Lobby
  * - Disable block break
@@ -38,7 +35,7 @@ public class SurvivalGamesPlugin extends JavaPlugin
 	@Override
 	public void onEnable()
 	{
-		Lobby lobby = new Lobby();
+		Lobby lobby = new Lobby(Bukkit.getWorlds().get(0));
 		
 		this.mapManager = new MapManager(this);
 		this.gameManager = new GameManager(this, this.mapManager, lobby);

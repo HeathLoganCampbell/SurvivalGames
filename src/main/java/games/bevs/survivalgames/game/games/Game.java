@@ -205,6 +205,8 @@ public class Game
 	
 	public void second()
 	{
+		this.components.forEach(Component::onSecond);
+		
 		this.onSeconds();
 	}
 	
