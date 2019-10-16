@@ -18,12 +18,11 @@ import games.bevs.survivalgames.map.MapManager;
  * /sg dev join <GameId> 
  *
  * TODO:
+ * - Team Games
  * - Scoreboards
  * 		- players left
  * 		- players watching
  * - Database
- * - Lobby
- * - Disable block break
  * - Levels
  * 
  */

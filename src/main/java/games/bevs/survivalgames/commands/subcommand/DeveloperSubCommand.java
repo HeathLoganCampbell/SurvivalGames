@@ -4,14 +4,15 @@ import java.util.Iterator;
 import java.util.Map.Entry;
 
 import org.apache.commons.lang.StringUtils;
+import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import games.bevs.survivalgames.commons.utils.CC;
 import games.bevs.survivalgames.game.GameClock;
 import games.bevs.survivalgames.game.GameManager;
-import games.bevs.survivalgames.game.games.Game;
 import games.bevs.survivalgames.game.games.classic.ClassicGame;
+import games.bevs.survivalgames.game.games.spleef.SpleefGame;
 
 public class DeveloperSubCommand extends SubCommand
 {
@@ -24,10 +25,19 @@ public class DeveloperSubCommand extends SubCommand
 		this.gameManager = gameManager;
 	}
 
-	private boolean createGame()
+	private boolean getGame(String gameName)
 	{
-		this.gameManager.createGame(ClassicGame.class);
-		return true;
+		if(gameName.equalsIgnoreCase("classic"))
+		{
+			this.gameManager.createGame(ClassicGame.class);
+			return true;
+		}
+		else if(gameName.equalsIgnoreCase("spleef"))
+		{
+			this.gameManager.createGame(SpleefGame.class);
+			return true;
+		}
+		return false;
 	}
 	
 	private boolean listGame(Player player)
@@ -78,7 +88,10 @@ public class DeveloperSubCommand extends SubCommand
 			String subCmd = args[0];
 			if(subCmd.equalsIgnoreCase("create"))
 			{
-				return this.createGame();
+				String gameName = "classic";
+				if(args.length >= 2)
+					gameName =  args[1];
+				return this.getGame(gameName);
 			}
 			
 			if(subCmd.equalsIgnoreCase("list"))
@@ -103,6 +116,28 @@ public class DeveloperSubCommand extends SubCommand
 				
 				int gameId = Integer.parseInt(gameIdStr);
 				return this.joinGame(player, gameId);
+			}
+			
+			if(subCmd.equalsIgnoreCase("alljoin"))
+			{
+				if(args.length < 2)
+				{
+					player.sendMessage("/sg dev join <GameId>");
+					return false;
+				}
+				
+				String gameIdStr = args[1];
+				if(!StringUtils.isNumeric(gameIdStr))
+				{
+					player.sendMessage("GameId must be a number, do '/sg dev list' for ids");
+					return false;
+				}
+				
+				int gameId = Integer.parseInt(gameIdStr);
+				Bukkit.getOnlinePlayers().forEach(randomPlayer -> {
+					this.joinGame(randomPlayer, gameId);
+				});
+				return true;
 			}
 			
 			if(subCmd.equalsIgnoreCase("leave"))
@@ -142,6 +177,8 @@ public class DeveloperSubCommand extends SubCommand
 				int gameId = Integer.parseInt(gameIdStr);
 				return this.tpGame(player, gameId);
 			}
+			
+			
 		} else
 		{
 			sender.sendMessage("ummm, not enough args");

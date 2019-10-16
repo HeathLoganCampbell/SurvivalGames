@@ -7,6 +7,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.util.Vector;
 
+import games.bevs.survivalgames.commons.utils.CC;
 import games.bevs.survivalgames.game.Stage;
 import games.bevs.survivalgames.game.componets.Component;
 import games.bevs.survivalgames.game.games.Game;
@@ -33,6 +34,7 @@ public class FreezeComponet extends Component
 		if(to.getBlockX() == from.getBlockX()
 				&& to.getBlockZ() == from.getBlockZ())
 			return;
+		
 		
 		if(stage == Stage.FROZEN ||stage == Stage.TELEPORTING)
 		{

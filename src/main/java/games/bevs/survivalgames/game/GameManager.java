@@ -97,8 +97,7 @@ public class GameManager
 	
 	private GameClock addGame(Game game)
 	{
-		
-		GameClock clock = new GameClock(this.getPlugin(), game);
+		GameClock clock = new GameClock(this.getPlugin(), game, this.lobby);
 		this.games.put(game.getId(), clock);
 		
 		clock.start();

@@ -6,6 +6,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import games.bevs.survivalgames.commons.utils.CC;
 import games.bevs.survivalgames.events.StageChangeEvent;
 import games.bevs.survivalgames.game.games.Game;
+import games.bevs.survivalgames.lobby.Lobby;
 import lombok.Getter;
 
 public class GameClock 
@@ -20,12 +21,16 @@ public class GameClock
 	
 	private @Getter Game game;
 	
+	private @Getter Lobby lobby;
+	
 	private JavaPlugin plugin;
 	
-	public GameClock(JavaPlugin plugin, Game game)
+	public GameClock(JavaPlugin plugin, Game game, Lobby lobby)
 	{
 		this.stage =  Stage.CREATING;
 		this.seconds = this.stage.getSeconds();
+		
+		this.lobby = lobby;
 		
 		this.plugin = plugin;
 		this.game = game;
@@ -147,7 +152,7 @@ public class GameClock
 		
 		if(this.getStage() == Stage.WAITING_PLAYERS)
 		{
-			if(this.getGame().getPlayState().size() == 1)
+			if(this.getGame().getPlayState().size() >= 1)
 			{
 				this.setStage(Stage.COUNTDOWN);
 			}
@@ -165,8 +170,7 @@ public class GameClock
 		{
 			this.getGame().getMap().getWorld().getPlayers().forEach(player ->
 			{
-				player.teleport(Bukkit.getWorlds().get(0).getSpawnLocation());
-				player.sendMessage("Send to lobby");
+				this.getLobby().spawn(player);
 			});
 			this.setStage(Stage.DELETING);
 		}

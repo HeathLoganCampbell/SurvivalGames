@@ -12,8 +12,6 @@ public class PlayerUtils
 		InventoryUtils.clearAllInventory(player);
 		EffectUtils.clearEffects(player);
 		
-		
-		
 		PlayerUtils.resetHealth(player);
 		PlayerUtils.resetHunger(player);
 		PlayerUtils.resetFire(player);

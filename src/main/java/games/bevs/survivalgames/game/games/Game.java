@@ -8,6 +8,7 @@ import java.util.function.Consumer;
 
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
+import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.event.HandlerList;
@@ -15,6 +16,8 @@ import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 import org.bukkit.util.Vector;
 
 import games.bevs.survivalgames.commons.utils.CC;
@@ -50,11 +53,22 @@ public class Game
 	@Getter @Setter
 	private GameClock gameClock;
 	
+	@Getter
+	private GameSettings settings;
+	
 	public Game(String gamemode, JavaPlugin plugin, Map map)
 	{
 		this.gamemode = gamemode;
 		this.plugin = plugin;
 		this.map = map;
+		
+		this.settings = this.onSettings(new GameSettings());
+	}
+	
+	//Overriable
+	public GameSettings onSettings(GameSettings settings)
+	{
+		return settings;
 	}
 	
 	public void spawn()
@@ -132,10 +146,12 @@ public class Game
 	{
 		PlayerInventory inv = player.getInventory();
 		for(ItemStack item : inv.getContents())
-			player.getWorld().dropItemNaturally(player.getLocation(), item);
+			if(item != null && item.getType() != Material.AIR)
+				player.getWorld().dropItemNaturally(player.getLocation(), item);
 		
 		for(ItemStack item : inv.getArmorContents())
-			player.getWorld().dropItemNaturally(player.getLocation(), item);
+			if(item != null && item.getType() != Material.AIR)
+				player.getWorld().dropItemNaturally(player.getLocation(), item);
 		
 		inv.clear();
 		inv.setArmorContents(new ItemStack[4]);
@@ -168,6 +184,8 @@ public class Game
 		
 		this.deathLaunch(player);
 		this.toSpectator(player);
+		
+		player.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, 1000000, 0, true, false), true);
 		
 		this.onDeath(player, killer, cause);
 	}

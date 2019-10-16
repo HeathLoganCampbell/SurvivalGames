@@ -22,7 +22,11 @@ public class Lobby
 	{
 		PlayerUtils.reset(player);
 		
+		player.setFlying(false);
+		player.setAllowFlight(false);
+		
 		player.setGameMode(GameMode.SURVIVAL);
 		player.teleport(this.getWorld().getSpawnLocation());
+		player.sendMessage("Send Lobby");
 	}
 }

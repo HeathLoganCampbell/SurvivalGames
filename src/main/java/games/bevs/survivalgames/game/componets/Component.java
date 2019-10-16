@@ -4,6 +4,7 @@ import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 
+import games.bevs.survivalgames.commons.utils.CC;
 import games.bevs.survivalgames.game.PlayState;
 import games.bevs.survivalgames.game.Stage;
 import games.bevs.survivalgames.game.games.Game;
@@ -34,7 +35,12 @@ public class Component implements Listener
 	
 	public boolean isInGame(Player player)
 	{
-		return this.getGame().getPlayState().getOrDefault(player.getUniqueId(), PlayState.DEAD) != PlayState.ALIVE;
+		return this.getGame().getPlayState().getOrDefault(player.getUniqueId(), PlayState.DEAD) == PlayState.ALIVE;
+	}
+	
+	public void broadcast(String message)
+	{
+		this.getGame().broadcast(message);
 	}
 	
 	public void onSecond()

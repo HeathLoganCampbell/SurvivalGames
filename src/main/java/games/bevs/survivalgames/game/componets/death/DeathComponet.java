@@ -1,5 +1,6 @@
 package games.bevs.survivalgames.game.componets.death;
 
+import org.bukkit.Sound;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
@@ -86,6 +87,9 @@ public class DeathComponet extends Component
 			return;
 		
 		Player killer = this.getDamager(e);
+		
+		if(killer != null)
+			killer.playSound(killer.getLocation(), Sound.BLAZE_DEATH, 1f, 1f);
 		
 		if(this.onTriggerDeath(player, killer, e.getCause()))
 			e.setCancelled(true);

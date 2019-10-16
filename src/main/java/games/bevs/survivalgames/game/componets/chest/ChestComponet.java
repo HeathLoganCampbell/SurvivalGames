@@ -122,6 +122,9 @@ public class ChestComponet extends Component
 	{
 		Block block = e.getClickedBlock();
 		
+		if(block == null)
+			return;
+		
 		if(block.getWorld() != this.getGameWorld())
 			return;
 		
