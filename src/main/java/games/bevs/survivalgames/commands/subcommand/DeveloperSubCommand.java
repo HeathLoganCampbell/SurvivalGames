@@ -86,7 +86,8 @@ public class DeveloperSubCommand extends SubCommand
 	public boolean execute(CommandSender sender, String cmd, String[] args)
 	{
 		Player player = (Player) sender;
-
+		if(!sender.hasPermission("survivalgames.commands.dev"))
+			return false;
 
 		if(args.length >= 1)
 		{

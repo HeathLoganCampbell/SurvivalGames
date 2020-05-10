@@ -1,9 +1,11 @@
 package games.bevs.survivalgames.listeners;
 
+import games.bevs.survivalgames.SurvivalGames;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerKickEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
 import games.bevs.survivalgames.game.GameManager;
@@ -16,7 +18,8 @@ public class PlayerListener implements Listener
 {
 	@NonNull
 	private GameManager gameManager;
-	
+
+	/*
 	@EventHandler
 	public void onJoin(PlayerJoinEvent e)
 	{
@@ -28,10 +31,21 @@ public class PlayerListener implements Listener
 		player.teleport(game.getMap().getWorld().getSpawnLocation());
 		player.sendMessage("new world!");
 	}
+	 */
 	
 	@EventHandler
 	public void onQuit(PlayerQuitEvent e)
 	{
-		
+		Player player = e.getPlayer();
+		Game game = SurvivalGames.get().getGame(player);
+		SurvivalGames.get().getGameManager().leaveGame(player, game.getId());
+	}
+
+	@EventHandler
+	public void onKick(PlayerKickEvent e)
+	{
+		Player player = e.getPlayer();
+		Game game = SurvivalGames.get().getGame(player);
+		SurvivalGames.get().getGameManager().leaveGame(player, game.getId());
 	}
 }

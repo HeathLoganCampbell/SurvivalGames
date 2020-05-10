@@ -39,7 +39,7 @@ public class ScoreSubCommand extends SubCommand
 
 		if(args.length >= 1)
 		{
-			if(args[0].equalsIgnoreCase("clear"))
+			if(args[0].equalsIgnoreCase("clear") && sender.hasPermission("survivalgames.commands.score.clear"))
 			{
 				SurvivalGames.get().getScorecardManager().clearScorecards();
 			}

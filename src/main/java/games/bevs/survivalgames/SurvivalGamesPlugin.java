@@ -3,6 +3,7 @@ package games.bevs.survivalgames;
 import java.lang.reflect.Field;
 
 import games.bevs.survivalgames.listeners.LobbyListener;
+import games.bevs.survivalgames.listeners.PlayerListener;
 import games.bevs.survivalgames.scoreboard.MainAssembleAdapter;
 import io.github.thatkawaiisam.assemble.Assemble;
 import io.github.thatkawaiisam.assemble.AssembleStyle;
@@ -22,13 +23,16 @@ import games.bevs.survivalgames.map.MapManager;
  * /sg dev join <GameId> 
  *
  * TODO:
+ * - easy way to get players to join
+ * - Get McMonday Map Lobby
+ * - Create 4 maps
+ * -
+ * - fake players
  * - Regen soup
  * - TNT
  * - Surger Soup
  * - Player tracker
- * - Point Tracker
  *
- * - Maybe ENChant books
  * - Scoreboards
  * 		- players left
  * 		- players watching
@@ -48,13 +52,12 @@ public class SurvivalGamesPlugin extends JavaPlugin
 		this.assemble = new Assemble(this, new MainAssembleAdapter());
 		this.assemble.setTicks(2);
 		this.assemble.setAssembleStyle(AssembleStyle.KOHI);
-
-
 		
 //		Game game = this.gameManager.createGame(ClassicGame.class);
-		
 		Bukkit.getPluginManager().registerEvents(new GameHandler(), this);
 		Bukkit.getPluginManager().registerEvents(new LobbyListener(SurvivalGames.get().getLobby()), this);
+		Bukkit.getPluginManager().registerEvents(new PlayerListener(SurvivalGames.get().getGameManager()), this);
+		//PlayerListener
 		
 		registerCommands();
 		

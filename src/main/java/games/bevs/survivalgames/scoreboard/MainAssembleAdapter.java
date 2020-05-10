@@ -15,7 +15,7 @@ public class MainAssembleAdapter implements AssembleAdapter
     @Override
     public String getTitle(Player player)
     {
-        return CC.bAqua + "Mini MCMonday";
+        return CC.bAqua + "Mini MCMonday #0";
     }
 
     public void onPlayerInGame(Player player, Game game, List<String> toReturn)
