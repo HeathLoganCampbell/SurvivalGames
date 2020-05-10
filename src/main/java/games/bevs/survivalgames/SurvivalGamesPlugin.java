@@ -22,7 +22,13 @@ import games.bevs.survivalgames.map.MapManager;
  * /sg dev join <GameId> 
  *
  * TODO:
- * - Team Games
+ * - Regen soup
+ * - TNT
+ * - Surger Soup
+ * - Player tracker
+ * - Point Tracker
+ *
+ * - Maybe ENChant books
  * - Scoreboards
  * 		- players left
  * 		- players watching

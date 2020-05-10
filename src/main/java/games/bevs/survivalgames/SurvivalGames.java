@@ -5,6 +5,7 @@ import games.bevs.survivalgames.game.GameManager;
 import games.bevs.survivalgames.game.games.Game;
 import games.bevs.survivalgames.lobby.Lobby;
 import games.bevs.survivalgames.map.MapManager;
+import games.bevs.survivalgames.scorecard.ScorecardManager;
 import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -16,10 +17,15 @@ public class SurvivalGames
 {
     private static SurvivalGames INSTANCE; public static SurvivalGames get() { return INSTANCE; }
 
+    public static final int POINTS_PER_KILL = 5;
+    public static final int POINTS_PER_WIN = 50;
+    public static final int POINTS_PER_MINUTE = 1;
+
     private SurvivalGamesPlugin plugin;
 
     private MapManager mapManager;
     private GameManager gameManager;
+    private ScorecardManager scorecardManager;
     private Lobby lobby;
 
     public SurvivalGames(SurvivalGamesPlugin plugin)
@@ -27,6 +33,8 @@ public class SurvivalGames
         INSTANCE = this;
 
         this.plugin = plugin;
+
+        this.scorecardManager = new ScorecardManager();
 
         this.lobby = new Lobby(Bukkit.getWorlds().get(0));
 

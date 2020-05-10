@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.UUID;
 import java.util.function.Consumer;
 
+import games.bevs.survivalgames.SurvivalGames;
+import games.bevs.survivalgames.scorecard.Scorecard;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
@@ -55,6 +57,8 @@ public class Game
 	
 	@Getter
 	private GameSettings settings;
+	@Getter
+	private boolean championFired = false;
 
 	@Getter
 	private ChampionToken championToken;
@@ -101,6 +105,8 @@ public class Game
 	{
 		this.onChampion(championToken);
 //		this.gameClock.setStage(Stage.CHAMPIONS);
+
+		championFired = true;
 	}
 	
 	public void finish()
@@ -248,6 +254,15 @@ public class Game
 		if(championToken.getPlayer() != null)
 			winner = championToken.getPlayer().getName();
 		Bukkit.broadcastMessage(winner + " has won");
+
+		if(!this.isChampionFired())
+		{
+			if(winner != null)
+			{
+				Scorecard scorecard = SurvivalGames.get().getScorecardManager().getScorecard(championToken.getPlayer());
+				scorecard.addScoreEntry("Winning " + this.getId(), SurvivalGames.POINTS_PER_WIN);
+			}
+		}
 	}
 	
 	protected void onFinish()

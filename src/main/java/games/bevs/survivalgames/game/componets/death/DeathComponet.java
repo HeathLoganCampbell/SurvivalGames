@@ -1,5 +1,7 @@
 package games.bevs.survivalgames.game.componets.death;
 
+import games.bevs.survivalgames.SurvivalGames;
+import games.bevs.survivalgames.scorecard.Scorecard;
 import org.bukkit.Effect;
 import org.bukkit.Material;
 import org.bukkit.Sound;
@@ -71,6 +73,11 @@ public class DeathComponet extends Component
 	{
 		this.getGame().death(player, killer, cause);
 		this.deathMessages.onDeath(player, entityKiller, cause);
+		if(killer != null)
+		{
+			Scorecard scorecard = SurvivalGames.get().getScorecardManager().getScorecard(killer);
+			scorecard.addScoreEntry("killing " + player.getName() + " in " + this.getGame().getId(), SurvivalGames.POINTS_PER_KILL);
+		}
 		return true;
 	}
 	
@@ -109,7 +116,9 @@ public class DeathComponet extends Component
 		if (player.getVehicle() != null)
 			player.getVehicle().eject();
 		player.eject();
-		
+
+
+
 		if(this.onTriggerDeath(player, killer, killerEntity, e.getCause()))
 			e.setCancelled(true);
 	}
