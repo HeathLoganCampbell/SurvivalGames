@@ -2,6 +2,10 @@ package games.bevs.survivalgames;
 
 import java.lang.reflect.Field;
 
+import games.bevs.survivalgames.listeners.LobbyListener;
+import games.bevs.survivalgames.scoreboard.MainAssembleAdapter;
+import io.github.thatkawaiisam.assemble.Assemble;
+import io.github.thatkawaiisam.assemble.AssembleStyle;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandMap;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -28,20 +32,23 @@ import games.bevs.survivalgames.map.MapManager;
  */
 public class SurvivalGamesPlugin extends JavaPlugin
 {
-	private MapManager mapManager;
-	private GameManager gameManager;
-	
+	private Assemble assemble;//scoreboard
+
 	@Override
 	public void onEnable()
 	{
-		Lobby lobby = new Lobby(Bukkit.getWorlds().get(0));
-		
-		this.mapManager = new MapManager(this);
-		this.gameManager = new GameManager(this, this.mapManager, lobby);
+		new SurvivalGames(this);//init API
+
+		this.assemble = new Assemble(this, new MainAssembleAdapter());
+		this.assemble.setTicks(2);
+		this.assemble.setAssembleStyle(AssembleStyle.KOHI);
+
+
 		
 //		Game game = this.gameManager.createGame(ClassicGame.class);
 		
 		Bukkit.getPluginManager().registerEvents(new GameHandler(), this);
+		Bukkit.getPluginManager().registerEvents(new LobbyListener(SurvivalGames.get().getLobby()), this);
 		
 		registerCommands();
 		
@@ -58,7 +65,7 @@ public class SurvivalGamesPlugin extends JavaPlugin
 	@Override
 	public void onDisable()
 	{
-		
+		this.assemble.cleanup();
 	}
 	
 	private CommandMap getCommandMap()
@@ -92,7 +99,7 @@ public class SurvivalGamesPlugin extends JavaPlugin
 			return;
 		}
 		 
-		SurvivalGamesCommand sgCmd = new SurvivalGamesCommand(this.gameManager);
+		SurvivalGamesCommand sgCmd = new SurvivalGamesCommand(SurvivalGames.get().getGameManager());
 		commandMap.register(sgCmd.getName(), sgCmd);
 	}
 }

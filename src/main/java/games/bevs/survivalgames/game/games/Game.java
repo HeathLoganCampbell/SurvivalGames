@@ -55,6 +55,9 @@ public class Game
 	
 	@Getter
 	private GameSettings settings;
+
+	@Getter
+	private ChampionToken championToken;
 	
 	public Game(String gamemode, JavaPlugin plugin, Map map)
 	{
@@ -97,7 +100,7 @@ public class Game
 	public void champion(ChampionToken championToken)
 	{
 		this.onChampion(championToken);
-		this.gameClock.setStage(Stage.FINISHED);
+//		this.gameClock.setStage(Stage.CHAMPIONS);
 	}
 	
 	public void finish()
@@ -262,14 +265,45 @@ public class Game
 		List<Player> alivePlayers = this.getAlivePlayers();
 		if(alivePlayers.size() <= 1)
 		{
-			ChampionToken championToken = new ChampionToken(alivePlayers.size() == 1 ? alivePlayers.get(0) : null);
-			this.champion(championToken);
+			this.championToken = new ChampionToken(alivePlayers.size() == 1 ? alivePlayers.get(0) : null);
+			this.getGameClock().setStage(Stage.CHAMPIONS);
 		}
 	}
 	
 	public void onStateChange(Stage stage, Stage lastStage)
 	{
 		
+	}
+
+	public boolean isAlive(UUID uuid)
+	{
+		PlayState playState = this.playState.get(uuid);
+		if(playState == null) return false;
+		return playState == PlayState.ALIVE;
+	}
+
+	public boolean isWithin(UUID uuid)
+	{
+		PlayState playState = this.playState.get(uuid);
+		return playState != null;
+	}
+
+	public int getPlayerCount()
+	{
+		return this.playState.size();
+	}
+
+	public int getAliveCount()
+	{
+		int aliveCount = 0;
+		for (java.util.Map.Entry<UUID, PlayState> uuidPlayStateEntry : this.playState.entrySet()) {
+			if(Bukkit.getPlayer(uuidPlayStateEntry.getKey()) == null) continue;
+			if(uuidPlayStateEntry.getValue() != PlayState.ALIVE) continue;
+
+			aliveCount++;
+		}
+
+		return aliveCount;
 	}
 	
 	public void remove()

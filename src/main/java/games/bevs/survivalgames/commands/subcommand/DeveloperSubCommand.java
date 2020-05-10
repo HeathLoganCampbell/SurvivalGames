@@ -14,6 +14,10 @@ import games.bevs.survivalgames.game.GameManager;
 import games.bevs.survivalgames.game.games.classic.ClassicGame;
 import games.bevs.survivalgames.game.games.spleef.SpleefGame;
 
+
+// /sg dev create classic
+// /sg dev list
+// /sg dev join <id>
 public class DeveloperSubCommand extends SubCommand
 {
 	private GameManager gameManager;
@@ -82,7 +86,8 @@ public class DeveloperSubCommand extends SubCommand
 	public boolean execute(CommandSender sender, String cmd, String[] args)
 	{
 		Player player = (Player) sender;
-		
+
+
 		if(args.length >= 1)
 		{
 			String subCmd = args[0];

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
@@ -44,10 +45,13 @@ public class ChestComponet extends Component
 		items.add(new ItemStackBuilder(Material.WOOD_AXE).build());
 		items.add(new ItemStackBuilder(Material.STONE_AXE).build());
 		items.add(new ItemStackBuilder(Material.GOLD_AXE).build());
+
+		items.add(new ItemStackBuilder(Material.STONE_HOE).build());
 		
 		//
 		items.add(new ItemStackBuilder(Material.FISHING_ROD).build());
 		items.add(new ItemStackBuilder(Material.WEB).build());
+		items.add(new ItemStackBuilder(Material.ARROW).amount(MathUtils.getRandom().nextInt(3) + 1).build());
 		
 		//Armor
 		items.add(new ItemStackBuilder(Material.LEATHER_HELMET).build());
@@ -81,6 +85,8 @@ public class ChestComponet extends Component
 		items.add(new ItemStackBuilder(Material.GOLD_INGOT).build());
 		items.add(new ItemStackBuilder(Material.DIAMOND).build());
 		items.add(new ItemStackBuilder(Material.STICK).build());
+		items.add(new ItemStackBuilder(Material.BOW).build());
+
 		
 		//misc
 		items.add(new ItemStackBuilder(Material.BOAT).build());
@@ -127,13 +133,14 @@ public class ChestComponet extends Component
 		
 		if(block.getWorld() != this.getGameWorld())
 			return;
-		
-		if (block.getType() == Material.CHEST  && !this.openedChests.contains(block)) 
+
+		if (block.getType() == Material.CHEST  && !this.openedChests.contains(block))
 		{
 			this.openedChests.add(block);
 			
 			Chest chest = (Chest) block.getState();
 			Inventory inv = chest.getBlockInventory();
+
 			 //add block to openChest
 			 for(BlockFace blockface : CHEST_BLOCKS_DOUBLE_FACES)
 			 {

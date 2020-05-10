@@ -13,7 +13,7 @@ public enum Stage
 	FROZEN(false, false,  10l),
 	GRACE_PERIOD(true, false,  5l),
 	LIVE(true, false, 60l * 20l),
-	CHAMPIONS(true, false, 10l),
+	CHAMPIONS(false, false, 10l),
 	FINISHED(false, false, -1l),
 	DELETING(false, false, -1l);
 	

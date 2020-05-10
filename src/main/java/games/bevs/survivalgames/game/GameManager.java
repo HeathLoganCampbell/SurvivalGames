@@ -71,12 +71,13 @@ public class GameManager
 	 */
 	public Game createGame(Class<?> gameClazz)
 	{
-		
+		System.out.println("Creating game " + gameClazz.getSimpleName());
 		this.lastId++;
 		
-		String name = "survivalgames" + File.separator + "sg_" + this.lastId;
+		String name = MapManager.ACTIVE_GAME_MAP_FOLDER + File.separator + "sg_" + this.lastId;
 		
 		String mapTemplate = this.mapManager.selectGameMap();
+		System.out.println("Selected map template " + mapTemplate);
 		this.mapManager.copyTo(mapTemplate, name);
 		World world = this.mapManager.loadWorld(name);
 		Map map = new Map(this.getPlugin(), world);

@@ -134,11 +134,20 @@ public class GameClock
 		{
 			this.decreaseSeconds();
 			
-			if(this.getSeconds() % 5 == 0)
-				Bukkit.broadcastMessage(this.getSeconds() + " seconds");
+			if(this.getStage() == Stage.COUNTDOWN && this.getSeconds() <= 5 && this.getSeconds() != 0)
+				Bukkit.broadcastMessage(CC.green + "Game starting in " + this.getSeconds() + " seconds");
+
+			if(this.getStage() == Stage.FROZEN && this.getSeconds() <= 10)
+			{
+				if(this.getSeconds() != 0)
+					Bukkit.broadcastMessage(CC.green + this.getSeconds() + " seconds...");
+				else
+					Bukkit.broadcastMessage(CC.green + "GO!");
+			}
 			
 			if(this.getSeconds() == 0)
 			{
+				//Teleport players to location
 				Stage stage = this.nextStage(this.getStage());
 				this.setStage(stage);
 			}

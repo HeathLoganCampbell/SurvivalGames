@@ -1,5 +1,7 @@
 package games.bevs.survivalgames.game.componets.death;
 
+import org.bukkit.Effect;
+import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -18,6 +20,8 @@ import games.bevs.survivalgames.game.games.Game;
 
 public class DeathComponet extends Component 
 {
+	private DeathMessages deathMessages = new DeathMessages();
+
 	public DeathComponet(Game game) 
 	{
 		super("Basic Death", game);
@@ -33,7 +37,7 @@ public class DeathComponet extends Component
 		if(!this.isInGame(player))
 			return;
 		
-		this.onTriggerDeath(player, null, DamageCause.CUSTOM);
+		this.onTriggerDeath(player, null, null, DamageCause.CUSTOM);
 	}
 	
 	private Player getDamager(EntityDamageEvent damageEvent)
@@ -63,9 +67,10 @@ public class DeathComponet extends Component
 	/**
 	 * @return cancel
 	 */
-	public boolean onTriggerDeath(Player player, Player killer, DamageCause cause)
+	public boolean onTriggerDeath(Player player, Player killer, Entity entityKiller, DamageCause cause)
 	{
 		this.getGame().death(player, killer, cause);
+		this.deathMessages.onDeath(player, entityKiller, cause);
 		return true;
 	}
 	
@@ -85,13 +90,27 @@ public class DeathComponet extends Component
 		//Their health is greater then damage so they haven't died.. YET!
 		if(finalDamage < health)
 			return;
-		
+
+		Entity killerEntity = null;
+		if(e instanceof EntityDamageByEntityEvent )
+		{
+			killerEntity = ((EntityDamageByEntityEvent) e).getDamager();
+		}
+
 		Player killer = this.getDamager(e);
 		
 		if(killer != null)
 			killer.playSound(killer.getLocation(), Sound.BLAZE_DEATH, 1f, 1f);
+
+		for(int i = 0; i < 2; i++) {
+			player.getWorld().playEffect(player.getLocation(), Effect.STEP_SOUND, Material.REDSTONE_BLOCK);
+			player.getWorld().playEffect(player.getEyeLocation(), Effect.STEP_SOUND, Material.REDSTONE_BLOCK);
+		}
+		if (player.getVehicle() != null)
+			player.getVehicle().eject();
+		player.eject();
 		
-		if(this.onTriggerDeath(player, killer, e.getCause()))
+		if(this.onTriggerDeath(player, killer, killerEntity, e.getCause()))
 			e.setCancelled(true);
 	}
 	
