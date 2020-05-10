@@ -14,9 +14,9 @@ public class ScorecardManager
 
     public ScorecardManager()
     {
-        Bukkit.getScheduler().runTask(SurvivalGames.get().getPlugin(), () -> {
-
-        });
+//        Bukkit.getScheduler().runTask(SurvivalGames.get().getPlugin(), () -> {
+//
+//        });
     }
 
     public ArrayList<Scorecard> getRankedScorecards()
@@ -30,6 +30,13 @@ public class ScorecardManager
     {
         Scorecard scorecard = new Scorecard(player.getUniqueId(), player.getName());
         this.scorecards.put(player.getUniqueId(), scorecard);
+    }
+
+    public void clearScorecards()
+    {
+        this.scorecards.forEach((key, value) -> {
+            value.clearScoreEntry();
+        });
     }
 
     public Scorecard getScorecard(UUID uuid)

@@ -3,6 +3,7 @@ package games.bevs.survivalgames;
 import games.bevs.survivalgames.game.GameClock;
 import games.bevs.survivalgames.game.GameManager;
 import games.bevs.survivalgames.game.games.Game;
+import games.bevs.survivalgames.leaderboard.LeaderboardManager;
 import games.bevs.survivalgames.lobby.Lobby;
 import games.bevs.survivalgames.map.MapManager;
 import games.bevs.survivalgames.scorecard.ScorecardManager;
@@ -26,6 +27,7 @@ public class SurvivalGames
     private MapManager mapManager;
     private GameManager gameManager;
     private ScorecardManager scorecardManager;
+    private LeaderboardManager leaderboardManager;
     private Lobby lobby;
 
     public SurvivalGames(SurvivalGamesPlugin plugin)
@@ -35,6 +37,7 @@ public class SurvivalGames
         this.plugin = plugin;
 
         this.scorecardManager = new ScorecardManager();
+        this.leaderboardManager = new LeaderboardManager();
 
         this.lobby = new Lobby(Bukkit.getWorlds().get(0));
 

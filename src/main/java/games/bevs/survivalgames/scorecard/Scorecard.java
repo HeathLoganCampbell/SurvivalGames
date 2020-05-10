@@ -1,6 +1,7 @@
 package games.bevs.survivalgames.scorecard;
 
 import games.bevs.survivalgames.commons.io.Pair;
+import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
@@ -12,8 +13,10 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class Scorecard implements Comparable<Scorecard>
 {
+    @Getter
     @NonNull
     private UUID playerUUID;
+    @Getter
     @NonNull
     private String playerName;
     private List<Pair<String, Integer>> scoreEntries = new LinkedList<>();

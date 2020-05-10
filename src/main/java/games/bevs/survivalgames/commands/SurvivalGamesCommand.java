@@ -3,6 +3,7 @@ package games.bevs.survivalgames.commands;
 import java.util.Arrays;
 import java.util.HashMap;
 
+import games.bevs.survivalgames.commands.subcommand.ScoreSubCommand;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 
@@ -21,6 +22,7 @@ public class SurvivalGamesCommand extends Command
 			Arrays.asList("sg"));
 		
 		this.registerSubCommand(new DeveloperSubCommand(gameManager));
+		this.registerSubCommand(new ScoreSubCommand(gameManager));
 	}
 	
 	private void registerSubCommand(SubCommand subCommand)
