@@ -1,6 +1,7 @@
 package games.bevs.survivalgames.listeners;
 
 import games.bevs.survivalgames.SurvivalGames;
+import games.bevs.survivalgames.commons.utils.CC;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -19,19 +20,20 @@ public class PlayerListener implements Listener
 	@NonNull
 	private GameManager gameManager;
 
-	/*
+
 	@EventHandler
 	public void onJoin(PlayerJoinEvent e)
 	{
 		Player player = e.getPlayer();
+		player.setPlayerListName(CC.yellow + e.getPlayer().getName());
 		
-		int lastGameId = this.gameManager.getLastId();
-		Game game = this.gameManager.getGame(lastGameId);
-		
-		player.teleport(game.getMap().getWorld().getSpawnLocation());
-		player.sendMessage("new world!");
+//		int lastGameId = this.gameManager.getLastId();
+//		Game game = this.gameManager.getGame(lastGameId);
+//
+//		player.teleport(game.getMap().getWorld().getSpawnLocation());
+//		player.sendMessage("new world!");
 	}
-	 */
+
 	
 	@EventHandler
 	public void onQuit(PlayerQuitEvent e)
