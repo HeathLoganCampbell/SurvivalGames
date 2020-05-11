@@ -57,7 +57,7 @@ public class GameClock
 		{
 			StageChangeEvent event = new StageChangeEvent(this.stage, stage, this);
 			event.call();
-			Bukkit.broadcastMessage(CC.gray + "Stage ]> " + this.stage + " => " + stage);
+//			Bukkit.broadcastMessage(CC.gray + "Stage ]> " + this.stage + " => " + stage);
 
 			this.stage = event.getNextStage();
 			this.seconds = event.getNextStage().getSeconds();

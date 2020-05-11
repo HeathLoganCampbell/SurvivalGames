@@ -2,6 +2,7 @@ package games.bevs.survivalgames.listeners;
 
 import games.bevs.survivalgames.SurvivalGames;
 import games.bevs.survivalgames.commons.utils.CC;
+import games.bevs.survivalgames.commons.utils.PlayerUtils;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -26,6 +27,8 @@ public class PlayerListener implements Listener
 	{
 		Player player = e.getPlayer();
 		player.setPlayerListName(CC.yellow + e.getPlayer().getName());
+		SurvivalGames.get().getScorecardManager().registerPlayer(player);
+		PlayerUtils.reset(player);
 		
 //		int lastGameId = this.gameManager.getLastId();
 //		Game game = this.gameManager.getGame(lastGameId);
@@ -40,6 +43,7 @@ public class PlayerListener implements Listener
 	{
 		Player player = e.getPlayer();
 		Game game = SurvivalGames.get().getGame(player);
+		if(game == null) return;
 		SurvivalGames.get().getGameManager().leaveGame(player, game.getId());
 	}
 

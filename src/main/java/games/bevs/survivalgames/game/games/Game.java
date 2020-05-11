@@ -7,6 +7,8 @@ import java.util.UUID;
 import java.util.function.Consumer;
 
 import games.bevs.survivalgames.SurvivalGames;
+import games.bevs.survivalgames.commons.utils.ItemStackBuilder;
+import games.bevs.survivalgames.game.componets.death.DeathMessages;
 import games.bevs.survivalgames.scorecard.Scorecard;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
@@ -62,6 +64,8 @@ public class Game
 
 	@Getter
 	private ChampionToken championToken;
+
+	private DeathMessages deathMessages = new DeathMessages();
 	
 	public Game(String gamemode, JavaPlugin plugin, Map map)
 	{
@@ -90,7 +94,7 @@ public class Game
 	
 	public void start()
 	{
-		Bukkit.broadcastMessage("registed compinets");
+//		Bukkit.broadcastMessage("registed compinets");
 		this.registerComponets();
 		
 		this.onStart();
@@ -117,7 +121,7 @@ public class Game
 	
 	/**
 	 * Component registered on Stage#GRACE_PERIOD
-	 * @param componet
+	 * @param
 	 */
 	public void addComponet(Component component)
 	{
@@ -240,7 +244,16 @@ public class Game
 	protected void onSpawn(Player player)
 	{
 		player.teleport(this.getMap().getSpawn());
+		player.setMaxHealth(20);
+		player.setHealth(20);
+		player.setFireTicks(0);
+		player.setFoodLevel(20);
+		player.setFallDistance(0);
+		player.getInventory().clear();
+		player.getInventory().setArmorContents(new ItemStack[4]);
 		player.setVelocity(new Vector(0, 0, 0));
+
+		player.getInventory().addItem(new ItemStackBuilder(Material.COMPASS).displayName(CC.aqua + "Player Tracker").build());
 	}
 	
 	protected void onStart()
@@ -253,16 +266,33 @@ public class Game
 		String winner = "No one";
 		if(championToken.getPlayer() != null)
 			winner = championToken.getPlayer().getName();
-		Bukkit.broadcastMessage(winner + " has won");
+		for(int i = 0; i < 4; i++)
+			Bukkit.broadcastMessage(CC.bGreen + winner + " has won!");
+
+		String finalWinner = winner;
 
 		if(!this.isChampionFired())
 		{
-			if(winner != null)
+			if(finalWinner != null)
 			{
 				Scorecard scorecard = SurvivalGames.get().getScorecardManager().getScorecard(championToken.getPlayer());
 				scorecard.addScoreEntry("Winning " + this.getId(), SurvivalGames.POINTS_PER_WIN);
 			}
 		}
+
+		Bukkit.getScheduler().runTaskLater(SurvivalGames.get().getPlugin(), () -> {
+			Bukkit.broadcastMessage(CC.bGreen + "Top Total Scores");
+			ArrayList<Scorecard> rankedScorecards = SurvivalGames.get().getScorecardManager().getRankedScorecards();
+			int i = 1;
+			for (Scorecard rankedScorecard : rankedScorecards)
+			{
+				if(i == 11) break;
+				int totalScore = rankedScorecard.getTotalScore();
+				String playerName = rankedScorecard.getPlayerName();
+				Bukkit.broadcastMessage(CC.green + i + ". " + totalScore + " " + playerName);
+				i++;
+			}
+		}, 5L);
 	}
 	
 	protected void onFinish()
@@ -272,7 +302,9 @@ public class Game
 	
 	protected void onDeath(Player player, Player killer, DamageCause cause)
 	{
-		this.broadcast(CC.gray + player.getDisplayName() + " has died! (" + this.getAlivePlayers().size() + " remaining)" );
+		String msg = this.deathMessages.onDeath(player, killer, cause);
+
+		this.broadcast(CC.gray + msg + "! (" + this.getAlivePlayers().size() + " remaining)" );
 	}
 	
 	protected void onSeconds()
@@ -295,6 +327,13 @@ public class Game
 		PlayState playState = this.playState.get(uuid);
 		if(playState == null) return false;
 		return playState == PlayState.ALIVE;
+	}
+
+	public boolean isSpectator(UUID uuid)
+	{
+		PlayState playState = this.playState.get(uuid);
+		if(playState == null) return false;
+		return playState == PlayState.DEAD || playState == PlayState.UNKNOWN;
 	}
 
 	public boolean isWithin(UUID uuid)

@@ -10,7 +10,7 @@ public class DeathMessages
 {
     public String onDeath(Player victim, Entity killer, EntityDamageEvent.DamageCause lastCause)
     {
-        String deathMessage = victim + " died";
+        String deathMessage = victim.getName() + " died";
 
         if(killer != null)
         {
@@ -53,14 +53,14 @@ public class DeathMessages
         if(killer instanceof Projectile)
         {
             Projectile projectile = (Projectile) killer;
-            deathMessage = victim + " was shoot to death";
+            deathMessage = victim.getName() + " was shoot to death";
 
             ProjectileSource shooter = projectile.getShooter();
 
             if(shooter instanceof Player)
             {
                 Player killerPlayer = (Player) shooter;
-                deathMessage = victim + " was shoot to death by " + killerPlayer.getName();
+                deathMessage = victim.getName() + " was shoot to death by " + killerPlayer.getName();
 
                 double dist = victim.getLocation().distanceSquared(killerPlayer.getLocation());
                 if(dist > (40 * 40))
@@ -70,11 +70,11 @@ public class DeathMessages
             }
             else if(shooter instanceof Skeleton)
             {
-                deathMessage = victim + " was shoot to death by a Skeleton";
+                deathMessage = victim.getName() + " was shoot to death by a Skeleton";
             }
             else if(shooter instanceof Blaze)
             {
-                deathMessage = victim + " was shoot to death by a Blaze";
+                deathMessage = victim.getName() + " was shoot to death by a Blaze";
             }
         }
         else if(killer instanceof Player)
@@ -84,11 +84,11 @@ public class DeathMessages
 
             if(weapon == null &&  weapon.getType() == Material.AIR)
             {
-                deathMessage = victim + " punched to death by " + killerPlayer;
+                deathMessage = victim.getName() + " punched to death by " + killerPlayer.getName();
             }
             else
             {
-                deathMessage = victim + " punched to death by " + killerPlayer + "'s " + weapon.getType().name().toLowerCase().replaceAll("_", " ");
+                deathMessage = victim.getName() + " slain by " + killerPlayer.getName() + "'s " + weapon.getType().name().toLowerCase().replaceAll("_", " ");
             }
         }
 

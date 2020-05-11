@@ -154,7 +154,7 @@ public class EntityRender
                 , lastPitch = 0;
 
     private List<RightClickListener> rightClickListeners = new LinkedList<>();
-    private List<AttackListener> AttackListeners = new LinkedList<>();
+    private List<AttackListener> attackListeners = new LinkedList<>();
     private WeakHashMap<Player, Boolean> canSeeEntities = new WeakHashMap<Player, Boolean>();
 
     public EntityRender(EntityType entityType)

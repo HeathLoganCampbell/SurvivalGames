@@ -13,6 +13,7 @@ import java.lang.reflect.Field;
 import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
+import com.mojang.authlib.properties.Property;
 
 public class PlayerRender extends LivingRender
 {
@@ -54,10 +55,27 @@ public class PlayerRender extends LivingRender
 
     private GameProfile gameprofile;
 
+    private String skinValue;
+    private String skinSignature;
+    private String capeURL;
+
     public PlayerRender(String username) {
         super(EntityType.PLAYER);
 
         this.gameprofile = new GameProfile(UUID.randomUUID(), username);;
+    }
+
+    public PlayerRender(String username, UUID uuid) {
+        super(EntityType.PLAYER);
+
+        this.gameprofile = new GameProfile(uuid, username);;
+    }
+
+    public PlayerRender(String username, String texture, String signature) {
+        super(EntityType.PLAYER);
+
+        this.gameprofile = new GameProfile(UUID.randomUUID(), username);
+        this.gameprofile.getProperties().put("textures", new Property("textures", texture, signature));
     }
 
     @Override
@@ -75,9 +93,9 @@ public class PlayerRender extends LivingRender
             PLAYER_YAW.setByte(packet, (byte) this.toAngle(this.getPitch()));
             PLAYER_PITCH.setByte(packet, (byte) this.toAngle(this.getPitch()));
 
-            DataWatcher watcher = new DataWatcher(null);
-            watcher.a(6,(float)20);
-            watcher.a(10,(byte)127);
+            DataWatcher watcher = this.getDataWatcher();
+//            watcher.a(6,(float)20);
+//            watcher.a(10,(byte)127);
 
             DATAWATCHER_FIELD.set(packet, watcher);
         } catch (IllegalAccessException e) {
@@ -86,6 +104,8 @@ public class PlayerRender extends LivingRender
 
 
         this.addToTab(players);
+        this.broadcastPacket(players, packet);
+
 
         return this;
     }
@@ -133,4 +153,17 @@ public class PlayerRender extends LivingRender
         return this;
     }
 
+    public void setSkinValue(String skinValue) {
+        this.skinValue = skinValue;
+    }
+
+    public void setSkinSignature(String skinSignature) {
+        this.skinSignature = skinSignature;
+    }
+
+    public void refershSkin()
+    {
+        this.gameprofile.getProperties().get("textures").clear();
+        this.gameprofile.getProperties().put("textures", new Property("textures", this.skinValue, this.skinSignature));
+    }
 }

@@ -2,8 +2,7 @@ package games.bevs.survivalgames;
 
 import java.lang.reflect.Field;
 
-import games.bevs.survivalgames.listeners.LobbyListener;
-import games.bevs.survivalgames.listeners.PlayerListener;
+import games.bevs.survivalgames.listeners.*;
 import games.bevs.survivalgames.scoreboard.MainAssembleAdapter;
 import io.github.thatkawaiisam.assemble.Assemble;
 import io.github.thatkawaiisam.assemble.AssembleStyle;
@@ -38,7 +37,10 @@ import games.bevs.survivalgames.map.MapManager;
  * 		- players watching
  * - Database
  * - Levels
- * 
+ *
+ * /sg dev join [GameId] - All players join the server who's not in creative
+ * /sg dev spectate [GameId]
+ *
  */
 public class SurvivalGamesPlugin extends JavaPlugin
 {
@@ -57,6 +59,10 @@ public class SurvivalGamesPlugin extends JavaPlugin
 		Bukkit.getPluginManager().registerEvents(new GameHandler(), this);
 		Bukkit.getPluginManager().registerEvents(new LobbyListener(SurvivalGames.get().getLobby()), this);
 		Bukkit.getPluginManager().registerEvents(new PlayerListener(SurvivalGames.get().getGameManager()), this);
+		Bukkit.getPluginManager().registerEvents(new SpectatorListener(), this);
+		Bukkit.getPluginManager().registerEvents(new GracePeriodListener(), this);
+		Bukkit.getPluginManager().registerEvents(new PreGameListener(), this);
+		Bukkit.getPluginManager().registerEvents(new CompassListener(), this);
 		//PlayerListener
 		
 		registerCommands();

@@ -2,6 +2,7 @@ package games.bevs.survivalgames.game.componets.death;
 
 import games.bevs.survivalgames.SurvivalGames;
 import games.bevs.survivalgames.scorecard.Scorecard;
+import org.bukkit.Bukkit;
 import org.bukkit.Effect;
 import org.bukkit.Material;
 import org.bukkit.Sound;
@@ -22,7 +23,7 @@ import games.bevs.survivalgames.game.games.Game;
 
 public class DeathComponet extends Component 
 {
-	private DeathMessages deathMessages = new DeathMessages();
+
 
 	public DeathComponet(Game game) 
 	{
@@ -72,7 +73,7 @@ public class DeathComponet extends Component
 	public boolean onTriggerDeath(Player player, Player killer, Entity entityKiller, DamageCause cause)
 	{
 		this.getGame().death(player, killer, cause);
-		this.deathMessages.onDeath(player, entityKiller, cause);
+//		this.deathMessages.onDeath(player, entityKiller, cause);
 		if(killer != null)
 		{
 			Scorecard scorecard = SurvivalGames.get().getScorecardManager().getScorecard(killer);
@@ -119,8 +120,9 @@ public class DeathComponet extends Component
 
 
 
-		if(this.onTriggerDeath(player, killer, killerEntity, e.getCause()))
+		if(this.onTriggerDeath(player, killer, killerEntity, e.getCause())) {
 			e.setCancelled(true);
+		}
 	}
 	
 	

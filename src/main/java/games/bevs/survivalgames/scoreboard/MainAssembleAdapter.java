@@ -4,6 +4,7 @@ import games.bevs.survivalgames.SurvivalGames;
 import games.bevs.survivalgames.commons.utils.CC;
 import games.bevs.survivalgames.commons.utils.StringUtils;
 import games.bevs.survivalgames.game.games.Game;
+import games.bevs.survivalgames.scorecard.Scorecard;
 import io.github.thatkawaiisam.assemble.AssembleAdapter;
 import org.bukkit.entity.Player;
 
@@ -20,18 +21,26 @@ public class MainAssembleAdapter implements AssembleAdapter
 
     public void onPlayerInGame(Player player, Game game, List<String> toReturn)
     {
+        toReturn.add(" ");
         toReturn.add(CC.green + game.getAliveCount() + " Players");
+        toReturn.add(" ");
     }
 
     public void onPlayerWaitingGame(Player player, Game game, List<String> toReturn)
     {
-        toReturn.add(CC.green + "Waiting Game" + StringUtils.repeat(".", (int) (game.getGameClock().getSeconds() % 3) + 1));
+        toReturn.add(CC.green + "Waiting Game" + StringUtils.repeat(".", 3 - ((int) (game.getGameClock().getSeconds() % 3) + 1)));
         toReturn.add(CC.green + game.getPlayerCount() + " Players");
+
     }
 
     public void onPlayerInLobby(Player player, List<String> toReturn)
     {
-        toReturn.add(CC.green + "Lobby");
+        Scorecard scorecard = SurvivalGames.get().getScorecardManager().getScorecard(player);
+
+//        toReturn.add(CC.green + "Lobby");
+        toReturn.add(" ");
+        toReturn.add(CC.green + "Score: " + scorecard.getTotalScore());
+        toReturn.add(" ");
     }
 
     @Override

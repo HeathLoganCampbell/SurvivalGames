@@ -1,5 +1,6 @@
 package games.bevs.survivalgames.lobby;
 
+import games.bevs.survivalgames.commons.utils.CC;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.World;
@@ -27,6 +28,8 @@ public class Lobby
 		
 		player.setGameMode(GameMode.SURVIVAL);
 		player.teleport(this.getWorld().getSpawnLocation());
-		player.sendMessage("Send Lobby");
+
+		player.sendMessage(CC.green + "Send back to lobby");
+//		player.sendMessage("Send Lobby");
 	}
 }

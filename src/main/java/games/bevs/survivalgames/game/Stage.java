@@ -8,12 +8,12 @@ public enum Stage
 {
 	CREATING(false, false, -1l),
 	WAITING_PLAYERS(false, true, -1l),
-	COUNTDOWN(false, true,  5l),
+	COUNTDOWN(false, true,  10l),
 	TELEPORTING(false, false,  -1l),
 	FROZEN(false, false,  10l),
-	GRACE_PERIOD(true, false,  5l),
+	GRACE_PERIOD(true, false,  30l),
 	LIVE(true, false, 60l * 20l),
-	CHAMPIONS(false, false, 10l),
+	CHAMPIONS(false, false, 15l),
 	FINISHED(false, false, -1l),
 	DELETING(false, false, -1l);
 	

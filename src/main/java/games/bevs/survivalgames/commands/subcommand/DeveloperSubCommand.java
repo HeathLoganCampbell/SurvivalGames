@@ -3,6 +3,7 @@ package games.bevs.survivalgames.commands.subcommand;
 import java.util.Iterator;
 import java.util.Map.Entry;
 
+import games.bevs.survivalgames.SurvivalGames;
 import org.apache.commons.lang.StringUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
@@ -141,7 +142,17 @@ public class DeveloperSubCommand extends SubCommand
 				
 				int gameId = Integer.parseInt(gameIdStr);
 				Bukkit.getOnlinePlayers().forEach(randomPlayer -> {
+					randomPlayer.sendMessage(CC.green + "You have been added to the game!");
+					randomPlayer.sendMessage(CC.red + "The game will be starting soon...");
 					this.joinGame(randomPlayer, gameId);
+				});
+				return true;
+			}
+
+			if(subCmd.equalsIgnoreCase("allreset"))
+			{
+				Bukkit.getOnlinePlayers().forEach(randomPlayer -> {
+					SurvivalGames.get().getLobby().spawn(randomPlayer);
 				});
 				return true;
 			}

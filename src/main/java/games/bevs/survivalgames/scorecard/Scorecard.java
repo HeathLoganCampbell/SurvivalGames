@@ -51,6 +51,6 @@ public class Scorecard implements Comparable<Scorecard>
     @Override
     public int compareTo(Scorecard o)
     {
-        return Integer.compare(this.getTotalScore(), o.getTotalScore());
+        return Integer.compare(o.getTotalScore(), this.getTotalScore());
     }
 }
