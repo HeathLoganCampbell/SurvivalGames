@@ -3,6 +3,7 @@ package games.bevs.survivalgames;
 import games.bevs.survivalgames.game.GameClock;
 import games.bevs.survivalgames.game.GameManager;
 import games.bevs.survivalgames.game.games.Game;
+import games.bevs.survivalgames.items.ItemManager;
 import games.bevs.survivalgames.leaderboard.LeaderboardManager;
 import games.bevs.survivalgames.lobby.Lobby;
 import games.bevs.survivalgames.map.MapManager;
@@ -28,6 +29,7 @@ public class SurvivalGames
     private GameManager gameManager;
     private ScorecardManager scorecardManager;
     private LeaderboardManager leaderboardManager;
+    private ItemManager itemManager;
     private Lobby lobby;
 
     public SurvivalGames(SurvivalGamesPlugin plugin)
@@ -36,6 +38,7 @@ public class SurvivalGames
 
         this.plugin = plugin;
 
+        this.itemManager = new ItemManager();
         this.scorecardManager = new ScorecardManager();
         this.leaderboardManager = new LeaderboardManager();
 
