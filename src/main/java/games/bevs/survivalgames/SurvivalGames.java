@@ -1,5 +1,7 @@
 package games.bevs.survivalgames;
 
+import games.bevs.survivalgames.commons.entityengine.EntityEngine;
+import games.bevs.survivalgames.commons.holograms.HologramManager;
 import games.bevs.survivalgames.game.GameClock;
 import games.bevs.survivalgames.game.GameManager;
 import games.bevs.survivalgames.game.games.Game;
@@ -7,6 +9,7 @@ import games.bevs.survivalgames.items.ItemManager;
 import games.bevs.survivalgames.leaderboard.LeaderboardManager;
 import games.bevs.survivalgames.lobby.Lobby;
 import games.bevs.survivalgames.map.MapManager;
+import games.bevs.survivalgames.commons.protocol.ProtocolManager;
 import games.bevs.survivalgames.scorecard.ScorecardManager;
 import lombok.Getter;
 import org.bukkit.Bukkit;
@@ -32,11 +35,18 @@ public class SurvivalGames
     private ItemManager itemManager;
     private Lobby lobby;
 
+    private ProtocolManager protocolManager;
+    private EntityEngine entityEngine;
+    private HologramManager hologramManager;
+
     public SurvivalGames(SurvivalGamesPlugin plugin)
     {
         INSTANCE = this;
 
         this.plugin = plugin;
+        this.protocolManager = new ProtocolManager(plugin);
+        this.entityEngine = new EntityEngine(plugin);
+        this.hologramManager = new HologramManager(plugin);
 
         this.itemManager = new ItemManager();
         this.scorecardManager = new ScorecardManager();
