@@ -1,6 +1,6 @@
 package games.bevs.survivalgames.commons.entityengine.protocol;
 
-import com.minecraftbut.library.modules.protocolv2.PacketListener;
+import games.bevs.survivalgames.commons.protocol.PacketListener;
 import io.netty.channel.Channel;
 import org.bukkit.entity.Player;
 
